@@ -18,7 +18,6 @@ const ViewTaskScreen = ({
   const [deleteModal, setDeleteModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const [newTask, setNewTask] = useState('');
-  console.log(items);
   return (
     <View style={styles.container}>
       <View style={styles.containerHeader}>
