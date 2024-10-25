@@ -5,6 +5,15 @@ import messaging from '@react-native-firebase/messaging';
 import {ActivityIndicator, Linking, PermissionsAndroid} from 'react-native';
 import {setItem} from './src/utils/asyncStorage';
 import Toast from 'react-native-toast-message';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import AddTaskModal from './src/screens/AddTaskScreen';
+import WelcomeScreen from './src/screens/Onboarding/WelcomeScreen';
+import FirstOnboardingScreen from './src/screens/Onboarding/FirstOnboardingScreen';
+import SecondOnboardingScreen from './src/screens/Onboarding/SecondOnboardingScreen';
+import ThirdOnboardingScreen from './src/screens/Onboarding/ThirdOnboardingScreen';
+import StartScreen from './src/screens/Onboarding/StartScreen';
+import LoginScreen from './src/screens/Onboarding/LoginScreen';
+import RegisterScreen from './src/screens/Onboarding/RegisterScreen';
 
 const NAVIGATION_IDS = ['Home', 'Settings'];
 
@@ -88,20 +97,48 @@ const App = () => {
         authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
       if (enabled) {
-        console.log('Authorization status:', authStatus);
         const token = await messaging().getToken();
         await setItem('token', token);
-        console.log('FCM token:', token);
       }
     };
 
     requestUserPermission();
   }, []);
+
+  const Stack = createNativeStackNavigator();
+
   return (
     <NavigationContainer
       linking={linking}
       fallback={<ActivityIndicator animating />}>
-      <ButtonTab />
+      <Stack.Navigator>
+        <Stack.Group screenOptions={{headerShown: false}}>
+          <Stack.Screen name="Welcome" component={WelcomeScreen} />
+          <Stack.Screen
+            name="FirstOnboarding"
+            component={FirstOnboardingScreen}
+          />
+          <Stack.Screen
+            name="SecondOnboarding"
+            component={SecondOnboardingScreen}
+          />
+          <Stack.Screen
+            name="ThirdOnboarding"
+            component={ThirdOnboardingScreen}
+          />
+          <Stack.Screen name="Start" component={StartScreen} />
+          <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="Register" component={RegisterScreen} />
+          <Stack.Screen name="HomePage" component={ButtonTab} />
+        </Stack.Group>
+        <Stack.Group
+          screenOptions={{
+            headerShown: false,
+            presentation: 'containedTransparentModal',
+          }}>
+          <Stack.Screen name="AddTask" component={AddTaskModal} />
+        </Stack.Group>
+      </Stack.Navigator>
       <Toast />
     </NavigationContainer>
   );

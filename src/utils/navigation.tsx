@@ -1,10 +1,12 @@
+/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react/no-unstable-nested-components */
 import React, {useRef} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import SettingsScreen from '../screens/SettingsScreen';
-import HomeScreen, {Props} from '../screens/Home/HomeScreen';
+import HomeScreen from '../screens/Home/HomeScreen';
 import Icon, {Icons} from '../components/Icons';
 import {
+  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -14,16 +16,14 @@ import {
 import {fonts} from '../constants/fonts';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import ViewTaskScreen from '../screens/Home/ViewTaskScreen';
-import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
+import {
+  getFocusedRouteNameFromRoute,
+  useNavigation,
+} from '@react-navigation/native';
+import AddTaskModal from '../screens/AddTaskScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
-
-export type RootStackParamList = {
-  HomePage: undefined;
-  ViewTask: Props;
-  Settings: undefined;
-};
 
 const TabButton = (props: any) => {
   const {item, onPress, accessibilityState} = props;
@@ -77,41 +77,100 @@ const buttonTabData = [
     iconName: 'home',
   },
   {
-    name: 'Settings',
+    name: 'Calender',
     component: SettingsScreen,
-    type: Icons.Feather,
-    iconName: 'settings',
+    type: Icons.MaterialIcons,
+    iconName: 'calendar-month',
+  },
+  {
+    name: 'Focus',
+    component: HomeStack,
+    type: Icons.SimpleLineIcons,
+    iconName: 'clock',
+  },
+  {
+    name: 'Profile',
+    component: SettingsScreen,
+    type: Icons.FontAwesome,
+    iconName: 'user-o',
   },
 ];
 
 export const ButtonTab = () => {
+  const navigation = useNavigation();
   return (
-    <Tab.Navigator
-      screenOptions={{
-        headerShown: false,
-        tabBarActiveTintColor: '#fff',
-        tabBarStyle: {
-          height: 100,
-          backgroundColor: '#363636',
-          justifyContent: 'space-between',
-          // elevation: 7,
-        },
-      }}>
-      {buttonTabData?.map((item, index) => {
-        return (
-          <Tab.Screen
-            key={index}
-            name={item.name}
-            component={item.component}
-            options={({route}) => ({
-              tabBarStyle: getTabBarStyle(route),
-              tabBarShowLabel: false,
-              tabBarButton: props => <TabButton {...props} item={item} />,
-            })}
-          />
-        );
-      })}
-    </Tab.Navigator>
+    <>
+      <Tab.Navigator
+        screenOptions={{
+          headerShown: false,
+          tabBarActiveTintColor: '#fff',
+          tabBarStyle: {
+            height: 70,
+            backgroundColor: '#363636',
+            justifyContent: 'space-between',
+            // elevation: 7,
+          },
+        }}>
+        {buttonTabData?.slice(0, 2)?.map((item, index) => {
+          return (
+            <Tab.Screen
+              key={index}
+              name={item.name}
+              component={item.component}
+              options={({route}) => ({
+                tabBarStyle: getTabBarStyle(route),
+                tabBarShowLabel: false,
+                tabBarButton: props => <TabButton {...props} item={item} />,
+              })}
+            />
+          );
+        })}
+        <Tab.Screen
+          name="New"
+          component={AddTaskModal}
+          options={{
+            tabBarShowLabel: false,
+            tabBarIcon: props => {
+              return (
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('AddTask' as never)}
+                  {...props}
+                  style={{
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: '#8687E7',
+                    height: Platform.OS === 'ios' ? 74 : 64,
+                    width: Platform.OS === 'ios' ? 74 : 64,
+                    top: Platform.OS === 'ios' ? -20 : -30,
+                    borderRadius: Platform.OS === 'ios' ? 37 : 32,
+                  }}>
+                  <Icon
+                    name="plus"
+                    type={Icons.FontAwesome6}
+                    size={24}
+                    color="#fff"
+                  />
+                </TouchableOpacity>
+              );
+            },
+          }}
+        />
+        {buttonTabData?.slice(2, 4)?.map((item, index) => {
+          return (
+            <Tab.Screen
+              key={index}
+              name={item.name}
+              component={item.component}
+              options={({route}) => ({
+                tabBarStyle: getTabBarStyle(route),
+                tabBarShowLabel: false,
+                tabBarButton: props => <TabButton {...props} item={item} />,
+              })}
+            />
+          );
+        })}
+      </Tab.Navigator>
+    </>
   );
 };
 

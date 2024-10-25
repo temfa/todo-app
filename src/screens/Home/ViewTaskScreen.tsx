@@ -1,14 +1,13 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useState} from 'react';
 import {NavigationProp, RouteProp, useRoute} from '@react-navigation/native';
-import {RootStackParamList} from '../../utils/navigation';
 import Icon, {Icons} from '../../components/Icons';
 import {fonts} from '../../constants/fonts';
 import DeleteModal from '../../components/DeleteModal';
 import {getItem, setItem} from '../../utils/asyncStorage';
-import {Props} from './HomeScreen';
 import Toast from 'react-native-toast-message';
 import EditModal from '../../components/EditModal';
+import {RootStackParamList, TaskProps} from '../../utils/type';
 
 const ViewTaskScreen = ({
   navigation,
@@ -19,6 +18,7 @@ const ViewTaskScreen = ({
   const [deleteModal, setDeleteModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const [newTask, setNewTask] = useState('');
+  console.log(items);
   return (
     <View style={styles.container}>
       <View style={styles.containerHeader}>
@@ -40,25 +40,50 @@ const ViewTaskScreen = ({
               color="#fff"
               style={styles.singleIcon}
             />
-            <Text style={styles.singleTitle}>Task Time :</Text>
+            <Text style={styles.singleTitle}>Task Date :</Text>
           </View>
           <View style={styles.singleView}>
-            <Text style={styles.singleViewText}>{items.time}</Text>
+            <Text style={styles.singleViewText}>{items.date}</Text>
           </View>
         </View>
         <View style={styles.single}>
           <View style={styles.singleHeader}>
             <Icon
               type={Icons.FontAwesome5}
-              name="calendar-alt"
+              name="tag"
               size={24}
               color="#fff"
               style={styles.singleIcon}
             />
-            <Text style={styles.singleTitle}>Task Date :</Text>
+            <Text style={styles.singleTitle}>Task Category :</Text>
           </View>
           <View style={styles.singleView}>
+            <Icon
+              type={
+                items.category.id === 6 || items.category.id === 7
+                  ? Icons.Feather
+                  : Icons.FontAwesome
+              }
+              name={items.category.icon}
+              color={items.category.iconColor}
+              size={24}
+            />
             <Text style={styles.singleViewText}>{items.date}</Text>
+          </View>
+        </View>
+        <View style={styles.single}>
+          <View style={styles.singleHeader}>
+            <Icon
+              type={Icons.Feather}
+              name="flag"
+              size={24}
+              color="#fff"
+              style={styles.singleIcon}
+            />
+            <Text style={styles.singleTitle}>Task Priority :</Text>
+          </View>
+          <View style={styles.singleView}>
+            <Text style={styles.singleViewText}>{items.priority}</Text>
           </View>
         </View>
         <TouchableOpacity
@@ -84,7 +109,7 @@ const ViewTaskScreen = ({
           task={items.title}
           close={() => setDeleteModal(false)}
           deleteTask={async () => {
-            const temp = (await getItem('tasks')) as never as Props[];
+            const temp = (await getItem('tasks')) as never as TaskProps[];
             if (temp) {
               let newTemp = temp.filter(item => {
                 return item.title !== items.title;
@@ -106,7 +131,7 @@ const ViewTaskScreen = ({
           close={() => setDeleteModal(false)}
           onChange={e => setNewTask(e)}
           editTask={async () => {
-            const temp = (await getItem('tasks')) as never as Props[];
+            const temp = (await getItem('tasks')) as never as TaskProps[];
             if (temp) {
               let newTemp = temp.map(item => {
                 if (item.title === items.title) {
@@ -176,6 +201,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     backgroundColor: '#363636',
     borderRadius: 6,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+    flexDirection: 'row',
   },
   singleViewText: {
     fontFamily: fonts.Regular,
