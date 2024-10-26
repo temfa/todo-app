@@ -28,7 +28,6 @@ const SingleTask: FC<Props> = ({
   category,
 }) => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  console.log(category);
   return (
     <TouchableOpacity
       style={styles.singleTasks}

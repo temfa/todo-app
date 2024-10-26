@@ -24,13 +24,6 @@ const HomeScreen = () => {
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
 
-  const getTasksFromLocal = async () => {
-    const tasks = await getItem('tasks');
-    if (tasks) {
-      return tasks;
-    }
-  };
-
   const sortArray = (item: TaskProps[]) => {
     let tempdata = item.sort((a: TaskProps) => {
       if (a.completed === true) {
@@ -43,38 +36,26 @@ const HomeScreen = () => {
   };
 
   useEffect(() => {
-    const initializeData = async () => {
-      try {
-        const storedData = await getTasksFromLocal();
-        if (storedData) setData(storedData as never as TaskProps[]);
-        else {
-          setData([]);
-        }
-      } catch (error) {
-        console.log('Error during data initialization', error);
-      } finally {
-        setLoading(false);
+    const getTasksFromLocal = async () => {
+      const tasks = await getItem('tasks');
+      if (tasks) {
+        setData(tasks as never as TaskProps[]);
       }
+      setLoading(false);
     };
-    initializeData();
+    getTasksFromLocal();
   }, []);
 
   useFocusEffect(
     useCallback(() => {
-      const initializeData = async () => {
-        try {
-          const storedData = await getTasksFromLocal();
-          if (storedData) setData(storedData as never as TaskProps[]);
-          else {
-            setData([]);
-          }
-        } catch (error) {
-          console.log('Error during data initialization', error);
-        } finally {
-          setLoading(false);
+      const getTasksFromLocal = async () => {
+        const tasks = await getItem('tasks');
+        if (tasks) {
+          setData(tasks as never as TaskProps[]);
         }
+        setLoading(false);
       };
-      initializeData();
+      getTasksFromLocal();
     }, []),
   );
 

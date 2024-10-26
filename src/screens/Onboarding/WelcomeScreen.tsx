@@ -20,12 +20,12 @@ const WelcomeScreen = ({
         setShowOnboarded(false);
         setTimeout(() => {
           navigation.navigate('Start');
-        }, 3000);
+        }, 1500);
       } else {
         setShowOnboarded(true);
         setTimeout(() => {
           navigation.navigate('FirstOnboarding');
-        }, 3000);
+        }, 1500);
       }
     };
     checkIfAlreadyOnboarded();
