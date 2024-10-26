@@ -5,6 +5,7 @@ import {
   StyleSheet,
   View,
   TextInput,
+  Keyboard,
 } from 'react-native';
 import Icon, {Icons} from '../components/Icons';
 import Modal from '../components/Modal';
@@ -44,7 +45,9 @@ const AddTaskModal = ({
   useEffect(() => {
     const getTasks = async () => {
       const tasks = await getItem('tasks');
-      setData(tasks as TaskProps[]);
+      if (tasks) {
+        setData(tasks as never as TaskProps[]);
+      }
     };
     getTasks();
   }, []);
@@ -68,6 +71,7 @@ const AddTaskModal = ({
             onChangeText={e => {
               setNewTask(e);
             }}
+            onSubmitEditing={() => Keyboard.dismiss()}
           />
           <View style={styles.addActionCont}>
             <View style={styles.addAction}>
