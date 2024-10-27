@@ -4,6 +4,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  ScrollView,
   View,
 } from 'react-native';
 import React, {FC} from 'react';
@@ -20,7 +21,7 @@ type Props = {
 const Login: FC<Props> = ({page}) => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Icon
@@ -96,7 +97,7 @@ const Login: FC<Props> = ({page}) => {
           <Text style={{color: Colors.white}}>Login</Text>
         </Text>
       )}
-    </View>
+    </ScrollView>
   );
 };
 
@@ -108,7 +109,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primaryBackground,
     paddingHorizontal: 24,
     paddingVertical: 20,
-    justifyContent: 'space-between',
+    // justifyContent: 'space-between',
   },
   title: {
     fontSize: 32,

@@ -4,6 +4,7 @@ import {
   ActivityIndicator,
   FlatList,
   Image,
+  RefreshControl,
   StyleSheet,
   Text,
   View,
@@ -18,11 +19,26 @@ import {getItem} from '../../utils/asyncStorage';
 import {useFocusEffect} from '@react-navigation/native';
 import {Colors} from '../../constants/color';
 import {TaskProps} from '../../utils/type';
+import * as Haptic from 'react-native-haptic-feedback';
 
 const HomeScreen = () => {
   const [data, setData] = useState<TaskProps[]>([]);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    Haptic.trigger('impactMedium');
+    setRefreshing(true);
+
+    setTimeout(async () => {
+      const tasks = await getItem('tasks');
+      if (tasks) {
+        setData(tasks as never as TaskProps[]);
+      }
+      setRefreshing(false);
+    }, 2000);
+  }, []);
 
   const sortArray = (item: TaskProps[]) => {
     let tempdata = item.sort((a: TaskProps) => {
@@ -67,23 +83,6 @@ const HomeScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.containerWrapper}>
-        <View>
-          <Header />
-          <View style={styles.searchContainer}>
-            <Icon
-              type={Icons.AntDesign}
-              name="search1"
-              color="#AFAFAF"
-              size={24}
-            />
-            <TextInput
-              style={styles.searchInput}
-              placeholder="Search for your task..."
-              placeholderTextColor="#6E6E6E"
-              onChangeText={e => setSearch(e)}
-            />
-          </View>
-        </View>
         {loading ? (
           <ActivityIndicator size="large" color="#8687E7" />
         ) : data?.length === 0 ? (
@@ -101,6 +100,25 @@ const HomeScreen = () => {
           </View>
         ) : (
           <FlatList
+            ListHeaderComponent={
+              <View>
+                <Header />
+                <View style={styles.searchContainer}>
+                  <Icon
+                    type={Icons.AntDesign}
+                    name="search1"
+                    color="#AFAFAF"
+                    size={24}
+                  />
+                  <TextInput
+                    style={styles.searchInput}
+                    placeholder="Search for your task..."
+                    placeholderTextColor="#6E6E6E"
+                    onChangeText={e => setSearch(e)}
+                  />
+                </View>
+              </View>
+            }
             data={filteredArray}
             style={{height: '70%', marginBottom: 24}}
             keyExtractor={item => item.id as never as string}
@@ -123,6 +141,9 @@ const HomeScreen = () => {
             extraData={data}
             // eslint-disable-next-line react/no-unstable-nested-components
             ItemSeparatorComponent={() => <View style={{marginVertical: 8}} />}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
           />
         )}
       </View>

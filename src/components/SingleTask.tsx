@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {FC} from 'react';
 import {fonts} from '../constants/fonts';
@@ -51,7 +52,9 @@ const SingleTask: FC<Props> = ({
       <View style={styles.singleTaskDetails}>
         <Text style={styles.singleTaskText}>{truncateText(task, 35)}</Text>
         <View style={styles.singleTaskInfo}>
-          <Text style={styles.singleTaskText}>{date}</Text>
+          <Text style={[{...styles.singleTaskText}, {fontSize: 12}]}>
+            {date}
+          </Text>
           <View style={styles.singleTaskSubInfo}>
             <View
               style={[

@@ -4126,9 +4126,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"TodoApp@workspace:.":
+"UpTodo@workspace:.":
   version: 0.0.0-use.local
-  resolution: "TodoApp@workspace:."
+  resolution: "UpTodo@workspace:."
   dependencies:
     "@babel/core": ^7.20.0
     "@babel/preset-env": ^7.20.0
@@ -4159,6 +4159,7 @@ __metadata:
     prettier: 2.8.8
     react: 18.3.1
     react-native: 0.75.4
+    react-native-haptic-feedback: ^2.3.3
     react-native-modal-datetime-picker: ^18.0.0
     react-native-paper: ^5.12.5
     react-native-safe-area-context: ^4.11.1
@@ -11786,6 +11787,15 @@ __metadata:
   version: 17.0.2
   resolution: "react-is@npm:17.0.2"
   checksum: 9d6d111d8990dc98bc5402c1266a808b0459b5d54830bbea24c12d908b536df7883f268a7868cfaedde3dd9d4e0d574db456f84d2e6df9c4526f99bb4b5344d8
+  languageName: node
+  linkType: hard
+
+"react-native-haptic-feedback@npm:^2.3.3":
+  version: 2.3.3
+  resolution: "react-native-haptic-feedback@npm:2.3.3"
+  peerDependencies:
+    react-native: ">=0.60.0"
+  checksum: 5ff12aaf44fa1cad8ab3d9c58046a11c631c6622955120294060efc51c625203ee4cd7ccb565663c12b27552ebbb7034a386000d9da738b9eea5ff62d58b14c0
   languageName: node
   linkType: hard
 
